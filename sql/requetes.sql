@@ -18,3 +18,12 @@ SELECT annee, ROUND(AVG(taux_regularite), 2) AS taux_moyen
 FROM ter
 WHERE region = 'Bretagne'
 GROUP BY annee;
+
+-- 3. Taux de régularité de l'ancienne région Auvergne-Rhône-Alpes, de 2013 à 2017
+-- Avant la fusion, la région est séparée en 'Rhône Alpes' et 'Auvergne' : on additionne les trains des deux,
+-- au lieu de faire la moyenne des taux, car Rhône Alpes fait rouler 6 fois plus de trains
+-- Résultat : entre 87,9 % et 89,7 %, sous le niveau de 2019-2025
+SELECT annee, ROUND(100.0 * (SUM(trains_circules) - SUM(trains_retard)) / SUM(trains_circules), 2) AS taux
+FROM ter
+WHERE region IN ('Auvergne', 'Rhône Alpes')
+GROUP BY annee;
