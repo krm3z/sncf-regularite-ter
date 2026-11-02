@@ -27,3 +27,14 @@ SELECT annee, ROUND(100.0 * (SUM(trains_circules) - SUM(trains_retard)) / SUM(tr
 FROM ter
 WHERE region IN ('Auvergne', 'Rhône Alpes')
 GROUP BY annee;
+
+-- 4. Taux de régularité d'Auvergne-Rhône-Alpes sur toute la période, de 2013 à 2026
+-- On réunit les trois noms de la région (Auvergne et Rhône Alpes avant 2018, Auvergne-Rhône-Alpes après)
+-- et on calcule le taux à partir des sommes de trains, pour toutes les années de la même façon
+-- Résultat : stable autour de 88-89 % jusqu'en 2018, pic à 92,7 % en 2021, puis retour vers 89-90 %
+-- Remarque : en 2020, la moyenne des mois (AVG) donnait 92,58 % contre 92,21 % ici,
+-- car les mois Covid avec peu de trains pesaient trop lourd
+SELECT annee, ROUND(100.0 * (SUM(trains_circules) - SUM(trains_retard)) / SUM(trains_circules), 2) AS taux
+FROM ter
+WHERE region IN ('Auvergne', 'Rhône Alpes', 'Auvergne-Rhône-Alpes')
+GROUP BY annee;
