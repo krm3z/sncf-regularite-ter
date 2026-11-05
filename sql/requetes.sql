@@ -38,3 +38,14 @@ SELECT annee, ROUND(100.0 * (SUM(trains_circules) - SUM(trains_retard)) / SUM(tr
 FROM ter
 WHERE region IN ('Auvergne', 'Rhône Alpes', 'Auvergne-Rhône-Alpes')
 GROUP BY annee;
+
+-- 5. Classement des régions selon leur taux de régularité, du meilleur au pire (2018 à 2025, années complètes)
+-- Pour chaque région, on additionne tous les trains de la période, puis on recalcule un seul taux
+-- Résultat : Bretagne 1re (95,25 %), Auvergne-Rhône-Alpes 11e sur 17 lignes (90,83 %)
+-- Attention : 17 lignes au lieu de 11 régions, car certaines régions apparaissent sous deux noms
+-- (ex. Centre et Centre Val-de-Loire) : à corriger dans la requête suivante
+SELECT region, ROUND(100.0 * (SUM(trains_circules) - SUM(trains_retard)) / SUM(trains_circules), 2) AS taux
+FROM ter
+WHERE annee BETWEEN 2018 AND 2025
+GROUP BY region
+ORDER BY taux DESC;
